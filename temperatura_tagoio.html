@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Temperatura</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      text-align: center;
+      color: white;
+    }
+    .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .value {
+      font-size: 60px;
+      font-weight: bold;
+    }
+    .label {
+      font-size: 25px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <div class="label">Temperatura</div>
+    <div class="value" id="temp">-- °C</div>
+  </div>
+
+  <script>
+    let temperatura = data.find(item => item.variable === "Temperature");
+
+    if (temperatura) {
+      let value = parseFloat(temperatura.value);
+      document.getElementById("temp").innerHTML = value + " °C";
+
+      let container = document.getElementById("container");
+
+      if (value < 18) {
+        container.style.background = "#3498db";
+      } else if (value <= 27) {
+        container.style.background = "#2ecc71";
+      } else {
+        container.style.background = "#e74c3c";
+      }
+    }
+  </script>
+</body>
+</html>
