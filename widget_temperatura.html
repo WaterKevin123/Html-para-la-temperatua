@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: transparent; overflow: hidden; }
+        .temp-container { background: white; border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 180px; transition: transform 0.3s; border-bottom: 6px solid #ffa502; }
+        .temp-container:hover { transform: translateY(-5px); }
+        .icon-box { font-size: 3.5rem; margin-bottom: 15px; height: 60px; display: flex; align-items: center; justify-content: center; }
+        .temp-value { font-size: 2.8rem; font-weight: 800; color: #2d3436; margin: 0; }
+        .label { font-size: 0.9rem; color: #636e72; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; margin-top: 5px; }
+        
+        /* Animaciones dinámicas */
+        .fa-fire { color: #ff4757; animation: heat-pulse 1.5s infinite; }
+        .fa-snowflake { color: #74b9ff; animation: spin-slow 5s infinite linear; }
+        .fa-thermometer-half { color: #ffa502; }
+
+        @keyframes heat-pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0px #ff4757); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 10px #ff4757); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 0px #ff4757); }
+        }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="card" class="temp-container">
+        <div id="icon" class="icon-box"><i class="fas fa-thermometer-half"></i></div>
+        <p class="temp-value"><span id="val">--</span>°C</p>
+        <div class="label">Temperatura</div>
+    </div>
+
+    <script src="https://admin.tago.io/dist/custom-widget.sdk.min.js"></script>
+    <script>
+        window.TagoIO.onStart(() => {
+            window.TagoIO.onRealtime((data) => {
+                if (!data || !data[0]) return;
+                const temp = parseFloat(data[0].value);
+                const valEl = document.getElementById('val');
+                const iconEl = document.getElementById('icon');
+                const cardEl = document.getElementById('card');
+
+                valEl.innerText = temp.toFixed(1);
+
+                if (temp >= 30) {
+                    iconEl.innerHTML = '<i class="fas fa-fire"></i>';
+                    cardEl.style.borderColor = "#ff4757";
+                } else if (temp <= 18) {
+                    iconEl.innerHTML = '<i class="fas fa-snowflake"></i>';
+                    cardEl.style.borderColor = "#74b9ff";
+                } else {
+                    iconEl.innerHTML = '<i class="fas fa-thermometer-half"></i>';
+                    cardEl.style.borderColor = "#ffa502";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
