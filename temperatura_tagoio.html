@@ -13,42 +13,50 @@
     .container {
       height: 100vh;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
     }
     .value {
       font-size: 60px;
       font-weight: bold;
     }
-    .label {
-      font-size: 25px;
-    }
   </style>
 </head>
 <body>
-  <div class="container" id="container">
-    <div class="label">Temperatura</div>
-    <div class="value" id="temp">-- °C</div>
+  <div class="container" id="box">
+    <h2>Temperatura</h2>
+    <div class="value" id="temp">Cargando...</div>
   </div>
 
   <script>
-    let temperatura = data.find(item => item.variable === "Temperature");
+    const token = "6b8cf141-d17a-4df9-92ed-1c61a4d05088";
 
-    if (temperatura) {
-      let value = parseFloat(temperatura.value);
+    async function getData() {
+      const res = await fetch("https://api.tago.io/data?variable=Temperature&qty=1", {
+        headers: {
+          "Device-Token": token
+        }
+      });
+
+      const data = await res.json();
+      const value = parseFloat(data.result[0].value);
+
       document.getElementById("temp").innerHTML = value + " °C";
 
-      let container = document.getElementById("container");
+      const box = document.getElementById("box");
 
       if (value < 18) {
-        container.style.background = "#3498db";
+        box.style.background = "#3498db";
       } else if (value <= 27) {
-        container.style.background = "#2ecc71";
+        box.style.background = "#2ecc71";
       } else {
-        container.style.background = "#e74c3c";
+        box.style.background = "#e74c3c";
       }
     }
+
+    getData();
+    setInterval(getData, 10000);
   </script>
 </body>
 </html>
